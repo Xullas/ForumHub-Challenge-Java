@@ -1,0 +1,3 @@
+ALTER TABLE topico RENAME COLUMN curso_id TO curso;
+
+ALTER TABLE topico ALTER COLUMN curso TYPE VARCHAR(255);
