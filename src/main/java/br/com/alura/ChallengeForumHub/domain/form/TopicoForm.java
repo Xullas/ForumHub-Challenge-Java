@@ -7,11 +7,13 @@ import jakarta.validation.constraints.NotNull;
 public record TopicoForm(
 
         @NotBlank
-        String topico,
+        String titulo,
         @NotBlank
         String mensagem,
         @NotNull
         StatusTopico statusTopico,
         @NotBlank
-        String curso) {
+        String curso,
+        @NotNull
+        Long autorId) {
 }
