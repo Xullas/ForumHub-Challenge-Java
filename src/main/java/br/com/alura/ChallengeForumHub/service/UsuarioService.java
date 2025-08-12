@@ -6,6 +6,7 @@ import br.com.alura.ChallengeForumHub.domain.view.UsuarioView;
 import br.com.alura.ChallengeForumHub.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UsuarioService {
@@ -13,10 +14,17 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Transactional
     public UsuarioView criarUsuario(UsuarioForm usuarioForm) {
         Usuario usuario = new Usuario(usuarioForm);
         long usuarioID = usuarioRepository.criarUsuario(usuario);
         UsuarioView usuarioView = new UsuarioView(usuario.withId(usuarioID));
+        return usuarioView;
+    }
+
+    public UsuarioView buscarUsuarioPorId(Long id) {
+        Usuario usuario = usuarioRepository.buscarUsuarioPorId(id);
+        UsuarioView usuarioView = new UsuarioView(usuario);
         return usuarioView;
     }
 }

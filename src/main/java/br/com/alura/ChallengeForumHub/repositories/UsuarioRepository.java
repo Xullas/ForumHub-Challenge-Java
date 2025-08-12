@@ -5,9 +5,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 @Repository
@@ -20,7 +21,6 @@ public class UsuarioRepository {
     }
 
 
-    @Transactional
     public Long criarUsuario(Usuario usuario){
         String sql = "INSERT INTO usuario(nome, email, senha) VALUES (?, ?, ?) RETURNING id;";
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -39,5 +39,19 @@ public class UsuarioRepository {
         Long generatedID = keyHolder.getKey().longValue();
 
         return generatedID;
+    }
+
+    public Usuario buscarUsuarioPorId(Long id){
+        String sql = "SELECT * FROM usuario WHERE id = ?;";
+        return jdbcTemplate.queryForObject(sql, (resultSet, i) -> getUsuario(resultSet), id);
+    }
+
+    private Usuario getUsuario(ResultSet resultSet) throws SQLException {
+        return Usuario.builder()
+                .id(resultSet.getLong("id"))
+                .nome(resultSet.getString("nome"))
+                .email(resultSet.getString("email"))
+                .senha(resultSet.getString("senha"))
+                .build();
     }
 }
