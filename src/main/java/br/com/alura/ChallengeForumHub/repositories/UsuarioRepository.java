@@ -5,6 +5,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
@@ -51,6 +52,11 @@ public class UsuarioRepository {
         }
     }
 
+    public UserDetails buscarUsuarioPorEmail(String login) {
+        String sql = "SELECT * FROM usuario WHERE email = ?;";
+        return jdbcTemplate.queryForObject(sql, (resultSet, i) -> getUsuario(resultSet), login);
+    }
+
     private Usuario getUsuario(ResultSet resultSet) throws SQLException {
         return Usuario.builder()
                 .id(resultSet.getLong("id"))
@@ -59,4 +65,5 @@ public class UsuarioRepository {
                 .senha(resultSet.getString("senha"))
                 .build();
     }
+
 }

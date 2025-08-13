@@ -2,10 +2,12 @@ package br.com.alura.ChallengeForumHub.controller;
 
 import br.com.alura.ChallengeForumHub.domain.dto.form.UsuarioForm;
 import br.com.alura.ChallengeForumHub.domain.dto.view.UsuarioView;
+import br.com.alura.ChallengeForumHub.domain.validation.NaCriacao;
 import br.com.alura.ChallengeForumHub.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -19,7 +21,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity criarUsuario(@RequestBody @Valid UsuarioForm usuarioForm, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity criarUsuario(@RequestBody @Validated(NaCriacao.class) UsuarioForm usuarioForm, UriComponentsBuilder uriBuilder) {
         UsuarioView usuarioView = usuarioService.criarUsuario(usuarioForm);
         URI uri = uriBuilder.path("usuario/{id}").buildAndExpand(usuarioView.id()).toUri();
         return ResponseEntity.created(uri).body(usuarioView);

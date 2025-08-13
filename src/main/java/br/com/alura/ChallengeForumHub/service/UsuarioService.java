@@ -6,6 +6,7 @@ import br.com.alura.ChallengeForumHub.domain.dto.view.UsuarioView;
 import br.com.alura.ChallengeForumHub.exception.TratadorDeErros;
 import br.com.alura.ChallengeForumHub.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,9 +18,13 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Transactional
     public UsuarioView criarUsuario(UsuarioForm usuarioForm) {
-        Usuario usuario = new Usuario(usuarioForm);
+        String senhaCriptografada = passwordEncoder.encode(usuarioForm.senha());
+        Usuario usuario = new Usuario(usuarioForm).withSenha(senhaCriptografada);
         long usuarioID = usuarioRepository.criarUsuario(usuario);
         UsuarioView usuarioView = new UsuarioView(usuario.withId(usuarioID));
         return usuarioView;
