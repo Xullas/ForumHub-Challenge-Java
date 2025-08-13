@@ -2,6 +2,7 @@ package br.com.alura.ChallengeForumHub.repositories;
 
 import br.com.alura.ChallengeForumHub.domain.StatusTopico;
 import br.com.alura.ChallengeForumHub.domain.Topico;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -35,17 +36,21 @@ public class TopicoRepository {
     }
 
     public Topico buscarTopicoPorId(Long id){
-        String sql = "SELECT * FROM topico WHERE id = ?;";
-        return jdbcTemplate.queryForObject(sql, (resultSet, i) -> getTopico(resultSet), id);
+        try {
+            String sql = "SELECT * FROM topico WHERE id = ?;";
+            return jdbcTemplate.queryForObject(sql, (resultSet, i) -> getTopico(resultSet), id);
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
     }
 
-    public Page<Topico> lintarTodosTopicos(String nomeCurso, Integer ano, Pageable paginacao){
+    public Page<Topico> listarTodosTopicos(String nomeCurso, Integer ano, Pageable paginacao){
         StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM topico WHERE 1=1 ");
         List<Object> params = new ArrayList<>();
 
         if(nomeCurso != null){
-            sqlBuilder.append(" AND curso = ? ");
-            params.add(nomeCurso);
+            sqlBuilder.append(" AND curso ILIKE ? ");
+            params.add("%" + nomeCurso + "%");
         }
 
         if(ano != null){
@@ -104,8 +109,10 @@ public class TopicoRepository {
         return jdbcTemplate.update(sqlFinal, params.toArray());
     }
 
-
-
+    public int deletarTopico(Long id) {
+        String sql = "DELETE FROM topico WHERE id = ?";
+        return jdbcTemplate.update(sql, id);
+    }
 
     private Topico getTopico(ResultSet resultSet) throws SQLException {
         return Topico.builder()
@@ -117,10 +124,5 @@ public class TopicoRepository {
                 .curso(resultSet.getString("curso"))
                 .autorId(resultSet.getLong("autor_id"))
                 .build();
-    }
-
-    public int deletarTopico(Long id) {
-        String sql = "DELETE FROM topico WHERE id = ?";
-        return jdbcTemplate.update(sql, id);
     }
 }

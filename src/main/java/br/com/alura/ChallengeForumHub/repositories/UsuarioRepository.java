@@ -1,6 +1,7 @@
 package br.com.alura.ChallengeForumHub.repositories;
 
 import br.com.alura.ChallengeForumHub.domain.Usuario;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -42,8 +43,12 @@ public class UsuarioRepository {
     }
 
     public Usuario buscarUsuarioPorId(Long id){
-        String sql = "SELECT * FROM usuario WHERE id = ?;";
-        return jdbcTemplate.queryForObject(sql, (resultSet, i) -> getUsuario(resultSet), id);
+        try {
+            String sql = "SELECT * FROM usuario WHERE id = ?;";
+            return jdbcTemplate.queryForObject(sql, (resultSet, i) -> getUsuario(resultSet), id);
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
     }
 
     private Usuario getUsuario(ResultSet resultSet) throws SQLException {
