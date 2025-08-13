@@ -1,6 +1,9 @@
 package br.com.alura.ChallengeForumHub.controller;
 
+import br.com.alura.ChallengeForumHub.domain.Usuario;
 import br.com.alura.ChallengeForumHub.domain.dto.form.UsuarioForm;
+import br.com.alura.ChallengeForumHub.security.TokenService;
+import br.com.alura.ChallengeForumHub.security.dto.DadosTokenJWT;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +22,14 @@ public class AutenticacaoController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping
     public ResponseEntity efetuarLogin(@RequestBody @Valid UsuarioForm usuarioForm) {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(usuarioForm.email(), usuarioForm.senha());
-        Authentication authentication = authenticationManager.authenticate(token);
-        return ResponseEntity.ok().build();
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(usuarioForm.email(), usuarioForm.senha());
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        String tokenJWT = tokenService.geraToken((Usuario) authentication.getPrincipal());
+        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
     }
 }
