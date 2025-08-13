@@ -1,8 +1,8 @@
 package br.com.alura.ChallengeForumHub.service;
 
 import br.com.alura.ChallengeForumHub.domain.Usuario;
-import br.com.alura.ChallengeForumHub.domain.form.UsuarioForm;
-import br.com.alura.ChallengeForumHub.domain.view.UsuarioView;
+import br.com.alura.ChallengeForumHub.domain.dto.form.UsuarioForm;
+import br.com.alura.ChallengeForumHub.domain.dto.view.UsuarioView;
 import br.com.alura.ChallengeForumHub.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

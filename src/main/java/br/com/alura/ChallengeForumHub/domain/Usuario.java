@@ -1,6 +1,6 @@
 package br.com.alura.ChallengeForumHub.domain;
 
-import br.com.alura.ChallengeForumHub.domain.form.UsuarioForm;
+import br.com.alura.ChallengeForumHub.domain.dto.form.UsuarioForm;
 import lombok.*;
 
 @AllArgsConstructor

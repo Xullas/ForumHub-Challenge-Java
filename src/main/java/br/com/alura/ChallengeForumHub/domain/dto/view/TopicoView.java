@@ -1,4 +1,4 @@
-package br.com.alura.ChallengeForumHub.domain.view;
+package br.com.alura.ChallengeForumHub.domain.dto.view;
 
 import br.com.alura.ChallengeForumHub.domain.StatusTopico;
 import br.com.alura.ChallengeForumHub.domain.Topico;

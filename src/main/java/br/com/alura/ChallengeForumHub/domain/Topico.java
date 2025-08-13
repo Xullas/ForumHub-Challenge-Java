@@ -1,6 +1,6 @@
 package br.com.alura.ChallengeForumHub.domain;
 
-import br.com.alura.ChallengeForumHub.domain.form.TopicoForm;
+import br.com.alura.ChallengeForumHub.domain.dto.form.TopicoForm;
 import lombok.*;
 
 import java.time.LocalDateTime;

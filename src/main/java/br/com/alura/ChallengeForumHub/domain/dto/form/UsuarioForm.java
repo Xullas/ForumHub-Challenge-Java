@@ -1,4 +1,4 @@
-package br.com.alura.ChallengeForumHub.domain.form;
+package br.com.alura.ChallengeForumHub.domain.dto.form;
 
 import jakarta.validation.constraints.NotBlank;
 

@@ -1,9 +1,9 @@
 package br.com.alura.ChallengeForumHub.controller;
 
-import br.com.alura.ChallengeForumHub.domain.form.TopicoForm;
+import br.com.alura.ChallengeForumHub.domain.dto.form.TopicoForm;
 import br.com.alura.ChallengeForumHub.domain.validation.NaAtualizacao;
 import br.com.alura.ChallengeForumHub.domain.validation.NaCriacao;
-import br.com.alura.ChallengeForumHub.domain.view.TopicoView;
+import br.com.alura.ChallengeForumHub.domain.dto.view.TopicoView;
 import br.com.alura.ChallengeForumHub.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

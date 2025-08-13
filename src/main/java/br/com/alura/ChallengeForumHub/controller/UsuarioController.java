@@ -1,7 +1,7 @@
 package br.com.alura.ChallengeForumHub.controller;
 
-import br.com.alura.ChallengeForumHub.domain.form.UsuarioForm;
-import br.com.alura.ChallengeForumHub.domain.view.UsuarioView;
+import br.com.alura.ChallengeForumHub.domain.dto.form.UsuarioForm;
+import br.com.alura.ChallengeForumHub.domain.dto.view.UsuarioView;
 import br.com.alura.ChallengeForumHub.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
