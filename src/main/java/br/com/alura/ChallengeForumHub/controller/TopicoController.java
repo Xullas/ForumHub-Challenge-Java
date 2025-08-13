@@ -1,15 +1,17 @@
 package br.com.alura.ChallengeForumHub.controller;
 
 import br.com.alura.ChallengeForumHub.domain.form.TopicoForm;
+import br.com.alura.ChallengeForumHub.domain.validation.NaAtualizacao;
+import br.com.alura.ChallengeForumHub.domain.validation.NaCriacao;
 import br.com.alura.ChallengeForumHub.domain.view.TopicoView;
 import br.com.alura.ChallengeForumHub.service.TopicoService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -23,7 +25,7 @@ public class TopicoController {
     private TopicoService topicoService;
 
     @PostMapping
-    public ResponseEntity criarTopico(@RequestBody @Valid TopicoForm topicoForm, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity criarTopico(@RequestBody @Validated(NaCriacao.class) TopicoForm topicoForm, UriComponentsBuilder uriBuilder) {
         TopicoView topicoView = topicoService.criarTopico(topicoForm);
         URI uri = uriBuilder.path("usuario/{id}").buildAndExpand(topicoView.id()).toUri();
         return ResponseEntity.created(uri).body(topicoView);
@@ -45,7 +47,7 @@ public class TopicoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity atualizarTopico(@PathVariable long id, @RequestBody @Valid TopicoForm topicoForm){
+    public ResponseEntity atualizarTopico(@PathVariable long id, @RequestBody @Validated(NaAtualizacao.class) TopicoForm topicoForm){
         TopicoView topicoView = topicoService.atualizarTopico(id, topicoForm);
         return ResponseEntity.ok(topicoView);
     }

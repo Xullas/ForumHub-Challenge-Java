@@ -1,19 +1,21 @@
 package br.com.alura.ChallengeForumHub.domain.form;
 
 import br.com.alura.ChallengeForumHub.domain.StatusTopico;
+import br.com.alura.ChallengeForumHub.domain.validation.NaAtualizacao;
+import br.com.alura.ChallengeForumHub.domain.validation.NaCriacao;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record TopicoForm(
 
-        @NotBlank
+        @NotBlank(groups = NaCriacao.class)
         String titulo,
-        @NotBlank
+        @NotBlank(groups = NaCriacao.class)
         String mensagem,
-        @NotNull
+        @NotNull(groups = NaCriacao.class)
         StatusTopico statusTopico,
-        @NotBlank
+        @NotBlank(groups = NaCriacao.class)
         String curso,
-        @NotNull
+        @NotNull(groups = {NaCriacao.class, NaAtualizacao.class})
         Long autorId) {
 }

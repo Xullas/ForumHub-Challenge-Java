@@ -67,7 +67,6 @@ public class TopicoRepository {
     }
 
 
-    //TODO Verificar a lógica para criar a Query de Update
     public int atualizarTopico(Topico topico, Long id){
         StringBuilder sqlBuilder = new StringBuilder("UPDATE topico SET ");
         List<Object> params = new ArrayList<>();
@@ -85,7 +84,11 @@ public class TopicoRepository {
                         sqlBuilder.append(", ");
                     }
                     sqlBuilder.append(field.getName()).append(" = ? ");
-                    params.add(fieldValue);
+                    if(fieldValue instanceof Enum){
+                        params.add(((Enum<?>) fieldValue).name());
+                    } else {
+                        params.add(fieldValue);
+                    }
                     isFirst = false;
                 }
             } catch (IllegalAccessException e) {
