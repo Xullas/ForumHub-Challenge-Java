@@ -16,7 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping("topico")
+@RequestMapping("topicos")
 public class TopicoController {
 
     @Autowired
@@ -38,9 +38,21 @@ public class TopicoController {
     public ResponseEntity<Page<TopicoView>> listarTodosTopicos(
             @RequestParam(required = false) String nomeCurso,
             @RequestParam(required = false) Integer ano,
-            @PageableDefault(size = 10, sort = "dataCriacao", direction = Sort.Direction.ASC) Pageable paginacao) {
+            @PageableDefault(size = 10, sort = "data_criacao", direction = Sort.Direction.ASC) Pageable paginacao) {
 
         Page<TopicoView> paginaDeTopicos = topicoService.listarTodosTopicos(nomeCurso, ano, paginacao);
         return ResponseEntity.ok(paginaDeTopicos);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity atualizarTopico(@PathVariable long id, @RequestBody @Valid TopicoForm topicoForm){
+        TopicoView topicoView = topicoService.atualizarTopico(id, topicoForm);
+        return ResponseEntity.ok(topicoView);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deletarTopico(@PathVariable Long id){
+        topicoService.deletarTopico(id);
+        return ResponseEntity.ok("Topico com ID: " + id + " excluído!");
     }
 }

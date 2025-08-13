@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class TopicoRepository {
     }
 
     public Topico criarTopico(Topico topico){
-        String sql = "INSERT INTO topico(titulo, mensagem, satus, autor_id, curso) VALUES (?, ?, ?, ?, ?) RETURNING *;";
+        String sql = "INSERT INTO topico(titulo, mensagem, status, autor_id, curso) VALUES (?, ?, ?, ?, ?) RETURNING *;";
         return jdbcTemplate.queryForObject(sql,
                 (resultSet, i) -> getTopico(resultSet),
                 topico.getTitulo(),
@@ -65,6 +66,44 @@ public class TopicoRepository {
         return new PageImpl<>(topicos, paginacao, total);
     }
 
+
+    //TODO Verificar a lógica para criar a Query de Update
+    public int atualizarTopico(Topico topico, Long id){
+        StringBuilder sqlBuilder = new StringBuilder("UPDATE topico SET ");
+        List<Object> params = new ArrayList<>();
+        boolean isFirst = true;
+
+        Field[] fields = topico.getClass().getDeclaredFields();
+
+        for (Field field : fields) {
+            field.setAccessible(true);
+
+            try {
+                Object fieldValue = field.get(topico);
+                if(fieldValue != null && !field.getName().equals("id") && !field.getName().equals("dataCriacao") && !field.getName().equals("autorId")){
+                    if (!isFirst) {
+                        sqlBuilder.append(", ");
+                    }
+                    sqlBuilder.append(field.getName()).append(" = ? ");
+                    params.add(fieldValue);
+                    isFirst = false;
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        sqlBuilder.append(" WHERE id = ?;");
+        params.add(id);
+
+        String sqlFinal = sqlBuilder.toString();
+
+        return jdbcTemplate.update(sqlFinal, params.toArray());
+    }
+
+
+
+
     private Topico getTopico(ResultSet resultSet) throws SQLException {
         return Topico.builder()
                 .id(resultSet.getLong("id"))
@@ -77,4 +116,8 @@ public class TopicoRepository {
                 .build();
     }
 
+    public int deletarTopico(Long id) {
+        String sql = "DELETE FROM topico WHERE id = ?";
+        return jdbcTemplate.update(sql, id);
+    }
 }

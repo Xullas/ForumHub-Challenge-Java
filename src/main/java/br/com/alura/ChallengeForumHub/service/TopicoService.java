@@ -33,4 +33,17 @@ public class TopicoService {
         Page<Topico> topicos = topicoRepository.lintarTodosTopicos(nomeCurso, ano, paginacao);
         return topicos.map(TopicoView::new);
     }
+
+    @Transactional
+    public TopicoView atualizarTopico(Long id, TopicoForm topicoForm) {
+        Topico topico = new Topico(topicoForm);
+        topicoRepository.atualizarTopico(topico, id);
+        TopicoView topicoView = new TopicoView(topicoRepository.buscarTopicoPorId(id));
+        return topicoView;
+    }
+
+    @Transactional
+    public void deletarTopico(Long id) {
+        topicoRepository.deletarTopico(id);
+    }
 }
