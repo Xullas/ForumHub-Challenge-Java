@@ -24,6 +24,5 @@ public class Topico {
         this.mensagem = topicoForm.mensagem();
         this.status = topicoForm.statusTopico();
         this.curso = topicoForm.curso();
-        this.autorId = topicoForm.autorId();
     }
 }

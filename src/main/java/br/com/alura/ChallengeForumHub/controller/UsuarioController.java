@@ -4,7 +4,6 @@ import br.com.alura.ChallengeForumHub.domain.dto.form.UsuarioForm;
 import br.com.alura.ChallengeForumHub.domain.dto.view.UsuarioView;
 import br.com.alura.ChallengeForumHub.domain.validation.NaCriacao;
 import br.com.alura.ChallengeForumHub.service.UsuarioService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

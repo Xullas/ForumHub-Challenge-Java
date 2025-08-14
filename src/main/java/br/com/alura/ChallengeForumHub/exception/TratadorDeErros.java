@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @RestControllerAdvice
@@ -34,5 +35,11 @@ public class TratadorDeErros {
         return erros.stream()
                 .map(erro -> new DadosErroValidacao(erro.getField(), erro.getDefaultMessage()))
                 .toList();
+    }
+
+    @ExceptionHandler(SQLException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public DadosErroRecursoNaoEncontrado tratarErroRecursoNaoEncontrado(SQLException ex) {
+        return new DadosErroRecursoNaoEncontrado(ex.getMessage());
     }
 }

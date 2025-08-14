@@ -6,6 +6,8 @@ import br.com.alura.ChallengeForumHub.domain.dto.view.UsuarioView;
 import br.com.alura.ChallengeForumHub.exception.TratadorDeErros;
 import br.com.alura.ChallengeForumHub.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,5 +39,15 @@ public class UsuarioService {
         }
         UsuarioView usuarioView = new UsuarioView(usuario);
         return usuarioView;
+    }
+
+    public Usuario getUsuarioLogado(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if(authentication == null || !(authentication.getPrincipal() instanceof Usuario)) {
+            throw new TratadorDeErros.ResourceNotFoundException("Usuário não autenticado ou tipo de principal inválido.");
+        }
+
+        return (Usuario) authentication.getPrincipal();
     }
 }
